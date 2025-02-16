@@ -18,5 +18,21 @@
         "titleBar.inactiveBackground": "#f9e64f99",
         "titleBar.inactiveForeground": "#15202b99"
     },
-    "peacock.color": "#f9e64f"
+    "peacock.color": "#f9e64f",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "database-nba-playoff-predictions-test-2025.cjsgac0qm87k.us-east-2.rds.amazonaws.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "nba-playoff-db-connection",
+            "database": "db_test_2025",
+            "username": "admin",
+            "askForPassword": true
+        }
+    ]
 }
