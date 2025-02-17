@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def get_users_data():
     try:
         # Execute query using the database connector
-        users = db.execute_query("SELECT * FROM Users")
+        users = db.execute_query("SELECT * FROM User")
         logger.info(f"Successfully retrieved {len(users)} users from database")
         print(users[0])
         return jsonify(users[0])
