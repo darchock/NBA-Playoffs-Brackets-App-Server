@@ -7,11 +7,11 @@
         # In client:
                 npm start
         # In server:
-                python3 main.py
-3. Connect to database:
+                python3 app/main.py
+3. Database:
         # make sure MySQL local version is 8.x.x and not 9.x.x which doesn't support rds (mysql --version)
-        mysql -h database-nba-playoff-prediction.cjsgac0qm87k.us-east-2.rds.amazonaws.com -u admin -p
-
+        mysql -h database-nba-playoff-predictions-test-2025.cjsgac0qm87k.us-east-2.rds.amazonaws.com -u admin -p
+        USE db_test_2025 # connect to specific database that we use
 
 # First time env ramp up:
 1. To initialize the virtual env:
