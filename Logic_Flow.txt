@@ -1,0 +1,12 @@
+# Auth & Login:
+
+- After successful login user "choose" his player (will be relevant only if we support multi-league options for one user) 
+
+# Dashboard & data presented at init:
+
+- Input: Player_Id, with it we'll fetch GetPlayerPredictions ; Output: List[PredictionModel]
+- Input: Player_Id, with it we'll fetch GetLeagueInfo ; Output: List[TeamModel] sorted by TeamModel.Points
+
+# Placing predictions:
+
+
