@@ -9,4 +9,5 @@ DB_CONFIG = {
 }
 
 # Create a singleton instance of DatabaseConnector
-db = DatabaseConnector(**DB_CONFIG)
+# db = DatabaseConnector(**DB_CONFIG)
+

@@ -9,9 +9,3 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String)
     google_id = Column(String)
-
-# Then query using ORM:
-with Session(engine) as session:
-    users = session.query(User).all()
-    for user in users:
-        print(user.email)

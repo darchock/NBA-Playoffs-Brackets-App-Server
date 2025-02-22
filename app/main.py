@@ -1,6 +1,10 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from database.db_config import db
+# from database.db_config import db
+from database.database_alchemy import get_db, engine
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import Session, declarative_base
+from models.models import User
 import logging
 
 # Initialize Flask app
@@ -14,30 +18,22 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-@app.route('/api/data', methods=['GET'])
-def get_users_data():
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user_email(user_id):
     try:
-        # Execute query using the database connector
-        users = db.execute_query("SELECT * FROM User")
-        logger.info(f"Successfully retrieved {len(users)} users from database")
-        print(users[0])
-        return jsonify(users[0])
+        # Create a new database session
+        db = get_db()
+        
+        user = db.query(User).filter(User.id == user_id).first()
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
+        
+        return jsonify({"email": user.email}), 200
+    
     except Exception as e:
-        logger.error(f"Error retrieving users: {str(e)}")
-        return jsonify({"error": "Failed to retrieve users"}), 500
-
-@app.route('/api/teams/<string:team_name>', methods=['GET'])
-def get_team_data(team_name):
-    try:
-        print("here")
-        # Execute query using the database connector
-        team = db.execute_query("SELECT * FROM Team WHERE name LIKE '%Boston Celtics%';")
-        logger.info(f"Successfully retrieved {team} users from database")
-        print(f"team name: {team[0]['name']}")
-        return team
-    except Exception as e:
-        logger.error(f"Error retrieving users: {str(e)}")
-        return jsonify({"error": "Failed to retrieve users"}), 500
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
