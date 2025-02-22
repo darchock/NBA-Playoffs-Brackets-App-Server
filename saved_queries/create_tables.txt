@@ -1,0 +1,89 @@
+-- Create User table
+CREATE TABLE User (
+    user_id VARCHAR(36) PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    google_id VARCHAR(255) NOT NULL UNIQUE,
+    is_admin BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert sample Users
+INSERT INTO User (user_id, email, google_id) VALUES
+('u1', 'john.doe@gmail.com', 'g123456'),
+('u2', 'jane.smith@gmail.com', 'g234567'),
+('u3', 'mike.wilson@gmail.com', 'g345678'),
+('u4', 'sarah.brown@gmail.com', 'g456789');
+
+-- Create League table
+CREATE TABLE League (
+    league_id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    creator_id VARCHAR(36) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (creator_id) REFERENCES User(user_id)
+);
+
+-- Create Team table
+CREATE TABLE Team (
+    team_id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    conference ENUM('Eastern', 'Western') NOT NULL,
+    seed INTEGER NOT NULL,
+    logo_url VARCHAR(255),
+    INDEX idx_name (name)
+);
+
+-- Create Player table
+CREATE TABLE Player (
+    player_id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36) NOT NULL,
+    league_id VARCHAR(36) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    winning_team_id VARCHAR(36) NOT NULL,
+    points INTEGER DEFAULT 0,
+    mvp_prediction VARCHAR(255) NOT NULL,
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+    FOREIGN KEY (league_id) REFERENCES League(league_id),
+    FOREIGN KEY (winning_team_id) REFERENCES Team(team_id),
+    INDEX idx_user (user_id),
+    INDEX idx_league (league_id),
+    INDEX idx_winning_team (winning_team_id)
+);
+
+-- Create Match table
+CREATE TABLE Matchup (
+    matchup_id VARCHAR(36) PRIMARY KEY,
+    home_team_id VARCHAR(36) NOT NULL,
+    away_team_id VARCHAR(36) NOT NULL,
+    status ENUM('upcoming', 'in_progress', 'completed') DEFAULT 'upcoming',
+    home_team_score INTEGER DEFAULT 0,
+    away_team_score INTEGER DEFAULT 0,
+    round INTEGER NOT NULL,
+    conference ENUM('Eastern', 'Western') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (home_team_id) REFERENCES Team(team_id),
+    FOREIGN KEY (away_team_id) REFERENCES Team(team_id),
+    INDEX idx_teams (home_team_id, away_team_id),
+    INDEX idx_round (round),
+    INDEX idx_status (status)
+);
+
+-- Create Prediction table
+CREATE TABLE Prediction (
+    prediction_id VARCHAR(36) PRIMARY KEY,
+    player_id VARCHAR(36) NOT NULL,
+    matchup_id VARCHAR(36) NOT NULL,
+    home_team_score INTEGER NOT NULL,
+    away_team_score INTEGER NOT NULL,
+    is_correct BOOLEAN DEFAULT NULL,
+    points_earned INTEGER DEFAULT 0,
+    predicted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (player_id) REFERENCES Player(player_id),
+    FOREIGN KEY (matchup_id) REFERENCES Matchup(matchup_id),
+    INDEX idx_player (player_id),
+    INDEX idx_matchup (matchup_id)
+);
+
+
