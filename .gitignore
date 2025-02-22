@@ -1,5 +1,6 @@
 # Python virtual environments (comprehensive patterns)
 .venv/
+new_venv/
 .venv/**/*
 venv/
 env/
