@@ -25,3 +25,6 @@
         pip install flask
         pip install flask_cors
         npm install react-scripts (run inside of client repo)
+        pip install sqlalchemy
+        pip install mysql-connector-python
+
