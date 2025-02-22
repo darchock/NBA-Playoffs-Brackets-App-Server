@@ -18,13 +18,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-@app.route('/users/<int:user_id>', methods=['GET'])
+@app.route('/api/users/<string:user_id>', methods=['GET'])
 def get_user_email(user_id):
     try:
-        # Create a new database session
-        db = get_db()
-        
-        user = db.query(User).filter(User.id == user_id).first()
+        print(f"Given user_id from client: {user_id}")
+        db = next(get_db())
+        user = db.query(User).filter(User.user_id == user_id).first()
+        print(f"Returned email from querry: {user.email}")
         if user is None:
             return jsonify({"error": "User not found"}), 404
         
