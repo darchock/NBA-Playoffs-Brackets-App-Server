@@ -1,0 +1,5 @@
+-- remove table example
+DROP TABLE IF EXISTS Team;
+
+-- delete entry from table
+DELETE FROM League WHERE name = 'Elite Ballers League';

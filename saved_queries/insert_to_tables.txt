@@ -1,0 +1,78 @@
+-- Insert 5 users to User table
+INSERT INTO User (email, google_id, is_admin) VALUES 
+('user1@example.com', 'google_12345', FALSE),
+('user2@example.com', 'google_67890', TRUE),
+('user3@example.com', 'google_13579', FALSE),
+('user4@example.com', 'google_24680', FALSE),
+('user5@example.com', 'google_98765', TRUE);
+
+-- Insert all 30 NBA teams with legit seeds
+-- Eastern Conference Teams
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Boston Celtics', 'Eastern', 1, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Milwaukee Bucks', 'Eastern', 2, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Philadelphia 76ers', 'Eastern', 3, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Cleveland Cavaliers', 'Eastern', 4, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('New York Knicks', 'Eastern', 5, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Miami Heat', 'Eastern', 6, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Brooklyn Nets', 'Eastern', 7, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Atlanta Hawks', 'Eastern', 8, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Toronto Raptors', 'Eastern', 9, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Chicago Bulls', 'Eastern', 10, TRUE);
+INSERT INTO Team (name, conference) VALUES ('Indiana Pacers', 'Eastern');
+INSERT INTO Team (name, conference) VALUES ('Orlando Magic', 'Eastern');
+INSERT INTO Team (name, conference) VALUES ('Charlotte Hornets', 'Eastern');
+INSERT INTO Team (name, conference) VALUES ('Washington Wizards', 'Eastern');
+INSERT INTO Team (name, conference) VALUES ('Detroit Pistons', 'Eastern');
+
+-- Western Conference Teams
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Denver Nuggets', 'Western', 1, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Memphis Grizzlies', 'Western', 2, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Sacramento Kings', 'Western', 3, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Phoenix Suns', 'Western', 4, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Los Angeles Clippers', 'Western', 5, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Golden State Warriors', 'Western', 6, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Los Angeles Lakers', 'Western', 7, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Minnesota Timberwolves', 'Western', 8, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('New Orleans Pelicans', 'Western', 9, TRUE);
+INSERT INTO Team (name, conference, seed, is_in_playoff) VALUES ('Oklahoma City Thunder', 'Western', 10, TRUE);
+INSERT INTO Team (name, conference) VALUES ('Portland Trail Blazers', 'Western');
+INSERT INTO Team (name, conference) VALUES ('Utah Jazz', 'Western');
+INSERT INTO Team (name, conference) VALUES ('Dallas Mavericks', 'Western');
+INSERT INTO Team (name, conference) VALUES ('Houston Rockets', 'Western');
+INSERT INTO Team (name, conference) VALUES ('San Antonio Spurs', 'Western');
+
+-- Insert 1 league
+INSERT INTO League (name, creator_id)  
+VALUES ('Elite Ballers League', (SELECT user_id FROM User WHERE google_id = 'google_12345' LIMIT 1));
+
+-- Insert 5 players, one for each user
+INSERT INTO Player (user_id, league_id, name, winning_team_id, mvp_prediction, is_commissioner) VALUES
+        ((SELECT user_id FROM User WHERE google_id = 'google_12345' LIMIT 1),
+        (SELECT league_id FROM League WHERE name = 'Elite Ballers League' LIMIT 1),
+        'Player One',
+        (SELECT team_id FROM Team WHERE name = 'Boston Celtics' LIMIT 1),
+        'Nikola Jokić', TRUE);
+INSERT INTO Player (user_id, league_id, name, winning_team_id, mvp_prediction, is_commissioner) VALUES
+        ((SELECT user_id FROM User WHERE google_id = 'google_67890' LIMIT 1),
+        (SELECT league_id FROM League WHERE name = 'Elite Ballers League' LIMIT 1),
+        'Player Two',
+        (SELECT team_id FROM Team WHERE name = 'Milwaukee Bucks' LIMIT 1),
+        'Luka Dončić', FALSE);
+INSERT INTO Player (user_id, league_id, name, winning_team_id, mvp_prediction, is_commissioner) VALUES
+        ((SELECT user_id FROM User WHERE google_id = 'google_13579' LIMIT 1),
+        (SELECT league_id FROM League WHERE name = 'Elite Ballers League' LIMIT 1),
+        'Player Three',
+        (SELECT team_id FROM Team WHERE name = 'Philadelphia 76ers' LIMIT 1),
+        'Giannis Antetokounmpo', FALSE);
+INSERT INTO Player (user_id, league_id, name, winning_team_id, mvp_prediction, is_commissioner) VALUES
+        ((SELECT user_id FROM User WHERE google_id = 'google_24680' LIMIT 1),
+        (SELECT league_id FROM League WHERE name = 'Elite Ballers League' LIMIT 1),
+        'Player Four',
+        (SELECT team_id FROM Team WHERE name = 'Cleveland Cavaliers' LIMIT 1),
+        'Joel Embiid', FALSE);
+INSERT INTO Player (user_id, league_id, name, winning_team_id, mvp_prediction, is_commissioner) VALUES
+        ((SELECT user_id FROM User WHERE google_id = 'google_98765' LIMIT 1),
+        (SELECT league_id FROM League WHERE name = 'Elite Ballers League' LIMIT 1),
+        'Player Five',
+        (SELECT team_id FROM Team WHERE name = 'Brooklyn Nets' LIMIT 1),
+        'Jayson Tatum', FALSE);
