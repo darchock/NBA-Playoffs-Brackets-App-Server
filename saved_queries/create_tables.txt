@@ -1,6 +1,6 @@
 -- Create User table
 CREATE TABLE User (
-    user_id VARCHAR(36) PRIMARY KEY,
+    user_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     email VARCHAR(255) NOT NULL UNIQUE,
     google_id VARCHAR(255) NOT NULL UNIQUE,
     is_admin BOOLEAN DEFAULT FALSE,
@@ -9,19 +9,19 @@ CREATE TABLE User (
 
 -- Create League table
 CREATE TABLE League (
-    league_id VARCHAR(36) PRIMARY KEY,
+    league_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     name VARCHAR(255) NOT NULL,
-    creator_id VARCHAR(36) NOT NULL,
+    creator_id CHAR(36) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (creator_id) REFERENCES User(user_id)
 );
 
 -- Create Team table
 CREATE TABLE Team (
-    team_id VARCHAR(36) PRIMARY KEY,
+    team_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     name VARCHAR(255) NOT NULL,
     conference ENUM('Eastern', 'Western') NOT NULL,
-    seed INTEGER NOT NULL,
+    seed INTEGER DEFAULT NULL,
     logo_url VARCHAR(255),
     is_in_playoff BOOLEAN DEFAULT FALSE,
     INDEX idx_name (name)
@@ -29,13 +29,14 @@ CREATE TABLE Team (
 
 -- Create Player table
 CREATE TABLE Player (
-    player_id VARCHAR(36) PRIMARY KEY,
-    user_id VARCHAR(36) NOT NULL,
-    league_id VARCHAR(36) NOT NULL,
+    player_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    user_id CHAR(36) NOT NULL,
+    league_id CHAR(36) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    winning_team_id VARCHAR(36) NOT NULL,
+    winning_team_id CHAR(36) NOT NULL,
     points INTEGER DEFAULT 0,
     mvp_prediction VARCHAR(255) NOT NULL,
+    is_commissioner BOOLEAN NOT NULL,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (league_id) REFERENCES League(league_id),
@@ -47,13 +48,13 @@ CREATE TABLE Player (
 
 -- Create Match table
 CREATE TABLE Matchup (
-    matchup_id VARCHAR(36) PRIMARY KEY,
-    home_team_id VARCHAR(36) NOT NULL,
-    away_team_id VARCHAR(36) NOT NULL,
+    matchup_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    home_team_id CHAR(36) NOT NULL,
+    away_team_id CHAR(36) NOT NULL,
     status ENUM('upcoming', 'in_progress', 'completed') DEFAULT 'upcoming',
     home_team_score INTEGER DEFAULT 0,
     away_team_score INTEGER DEFAULT 0,
-    round INTEGER NOT NULL,
+    round ENUM('playin_first', 'playin_second', first', 'second', 'conference_final', final) NOT NULL,
     conference ENUM('Eastern', 'Western') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -66,9 +67,9 @@ CREATE TABLE Matchup (
 
 -- Create Prediction table
 CREATE TABLE Prediction (
-    prediction_id VARCHAR(36) PRIMARY KEY,
-    player_id VARCHAR(36) NOT NULL,
-    matchup_id VARCHAR(36) NOT NULL,
+    prediction_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    player_id CHAR(36) NOT NULL,
+    matchup_id CHAR(36) NOT NULL,
     home_team_score INTEGER NOT NULL,
     away_team_score INTEGER NOT NULL,
     is_correct BOOLEAN DEFAULT NULL,
@@ -82,13 +83,13 @@ CREATE TABLE Prediction (
 
 -- Create FixedPrediction table
 CREATE TABLE FixedPrediction (
-    fixed_prediction_id VARCHAR(36) PRIMARY KEY,
-    player_id VARCHAR(36) NOT NULL,
-    home_team_id VARCHAR(36) NOT NULL,
-    away_team_id VARCHAR(36) NOT NULL,
+    fixed_prediction_id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    player_id CHAR(36) NOT NULL,
+    home_team_id CHAR(36) NOT NULL,
+    away_team_id CHAR(36) NOT NULL,
     home_team_score INTEGER NOT NULL,
     away_team_score INTEGER NOT NULL,
-    round INTEGER NOT NULL,
+    round ENUM('playin_first', 'playin_second', first', 'second', 'conference_final', final) NOT NULL,
     conference ENUM('Eastern', 'Western') NOT NULL,
     is_correct BOOLEAN DEFAULT NULL,
     points_earned INTEGER DEFAULT 0,
