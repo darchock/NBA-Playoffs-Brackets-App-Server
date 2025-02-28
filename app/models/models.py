@@ -28,7 +28,7 @@ class Team(Base):
     team_id = Column(String(36), primary_key=True)
     name = Column(String(255), nullable=False, index=True)
     conference = Column(Enum('Eastern', 'Western', name='conference_enum'), nullable=False)
-    seed = Column(Integer, nullable=False)
+    seed = Column(Integer, nullable=True)
     logo_url = Column(String(255), nullable=True)
 
 class Player(Base):
@@ -42,6 +42,7 @@ class Player(Base):
     points = Column(Integer, default=0)
     mvp_prediction = Column(String(255), nullable=False)
     joined_at = Column(TIMESTAMP, default=datetime.utcnow)
+    is_commissioner = Column(Boolean, nullable=False)
 
 class Matchup(Base):
     __tablename__ = 'Matchup'
@@ -53,7 +54,7 @@ class Matchup(Base):
                    default='upcoming', nullable=False, index=True)
     home_team_score = Column(Integer, default=0)
     away_team_score = Column(Integer, default=0)
-    round = Column(Integer, nullable=False, index=True)
+    round = Column(Enum('playin_first', 'playin_second', 'first', 'second', 'conference_final', 'final', name='round'), nullable=False)
     conference = Column(Enum('Eastern', 'Western', name='conference_enum'), nullable=False)
     created_at = Column(TIMESTAMP, default=datetime.utcnow)
     updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
